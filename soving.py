@@ -7,7 +7,7 @@ import os
 dsn = os.getenv("postgresdsn")
 with psycopg2.connect(dsn) as conn:
     with conn.cursor() as cur:
-        command = "select img from captchas where result is null;"
+        command = "select img from captchas where answer is null;"
         cur.execute(command)
         res = cur.fetchall()
         for image in res:
@@ -15,5 +15,5 @@ with psycopg2.connect(dsn) as conn:
             img.show()
             result = input("captcha:")
             cur.execute(
-                "update captchas set result=%s where img_sha=sha256(%s)", (result, image))
+                "update captchas set answer=%s where img_sha=sha256(%s)", (result, image))
         conn.commit()
