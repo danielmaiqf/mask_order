@@ -31,7 +31,7 @@ conn.commit()
 try:
     # start a driver
     opts = webdriver.chrome.options.Options()
-    # opts.headless = True
+    opts.headless = True
     driver = webdriver.Chrome(options=opts)
     # init driver
     driver.set_window_size(width=414, height=700)
@@ -158,17 +158,26 @@ try:
     '''
     driver.refresh()
     screenshot = driver.get_screenshot_as_png()
-    driver.save_screenshot("screenshot.png")
-except:
-    # delete the session
+
+    # change the session to the order
     cur = conn.cursor()
     cur.execute("delete from order_sessions where phone = %s", (phone, ))
+    cur.execute("insert into orders(phone, img) values(%s, %s);",
+                (phone, psycopg2.Binary(screenshot)))
+    conn.commit()
+    cur.close()
+    conn.close()
+except Exception as error:
+    # delete the session
+    print("ERROR: ", error)
+    driver.save_screenshot("error.png")
+    conn.rollback()
 
-# change the session to the order
-cur = conn.cursor()
-cur.execute("delete from order_sessions where phone = %s", (phone, ))
-cur.execute("insert into orders(phone, img) values(%s, %s);",
-            (phone, psycopg2.Binary(screenshot)))
-conn.commit()
-cur.close()
-conn.close()
+finally:
+    print("STEP: removing order session")
+    cur = conn.cursor()
+    cur.execute("delete from order_sessions where phone = %s", (phone, ))
+    conn.commit()
+    print("STEP: closing connection")
+    conn.close()
+
