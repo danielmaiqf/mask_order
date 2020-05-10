@@ -153,9 +153,9 @@ try:
     # follow th link
     driver.find_element_by_xpath(
         '//*[@id="app"]//table[@class="check_table"]/tbody/tr[1]/td[4]').click()
+    '''
     # take a screenshot, store into the db and save in localhost
     driver.set_window_size(width=300, height=3000)
-    '''
     driver.refresh()
     screenshot = driver.get_screenshot_as_png()
 
