@@ -108,7 +108,7 @@ try:
 
             cur = conn.cursor()
             cur.execute(
-                "select result from captchas where img_sha = sha256(%s)", (captcha_img,))
+                "select answer from captchas where img_sha = sha256(%s)", (captcha_img,))
             answer = cur.fetchone()[0]
             conn.commit()
             if answer == None:
