@@ -5,3 +5,5 @@ chromedriver*
 
 postgresdsn*
 *.png
+*.jpg
+*.jpeg
