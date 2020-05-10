@@ -165,8 +165,6 @@ try:
     cur.execute("insert into orders(phone, img) values(%s, %s);",
                 (phone, psycopg2.Binary(screenshot)))
     conn.commit()
-    cur.close()
-    conn.close()
 except Exception as error:
     # delete the session
     print("ERROR: ", error)
